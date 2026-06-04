@@ -1,7 +1,7 @@
 [project]
-name = "docker-project"
+name = "swarm-microservices-lab"
 version = "0.1.0"
-description = "Add your description here"
+description = "An educational FastAPI microservices project for learning Docker containers, service communication, and orchestration with Docker Swarm."
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
