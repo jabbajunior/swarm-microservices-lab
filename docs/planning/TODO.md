@@ -1,4 +1,3 @@
 # TODO
 
-## Finally set up 1password CLI on this machine
-## Figure out dev branch strategy
+Later edit python functions to support asynchronous calls
