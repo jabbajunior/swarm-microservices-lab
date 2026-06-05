@@ -5,15 +5,19 @@ Later edit python functions to support asynchronous calls
 ## Product Service Initial Plan
 The branch should support:
 
-  - Creating products.
-  - Listing products.
-  - Fetching products by ID or SKU.
-  - Updating products and prices.
-  - Deactivating products.
-  - Persisting products in PostgreSQL.
-  - Validating requests with Pydantic.
-  - Automated tests.
-  - Running through Docker Compose.
+  - [ ] Creating products.
+  - [ ] Listing products.
+  - [ ] Fetching products by ID or SKU.
+  - [ ] Updating products and prices.
+  - [ ] Deactivating products.
+  - [ ] Persisting products in PostgreSQL.
+  - [ ] Validating requests with Pydantic.
+  - [ ] Automated tests.
+  - [ ] Running through Docker Compose.
+
+Public read behavior: list products, fetch product by ID/SKU, later support product discovery/search. This can ultimately serve website-facing needs.
+Private admin behavior: create products, update prices, deactivate products. This should require employee/admin authorization and should not be open to normal website users.
+
 
 ## Product Service Error Handling
 

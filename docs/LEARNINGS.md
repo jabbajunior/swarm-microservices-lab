@@ -1,98 +1,120 @@
-This doc is where I will put any insights or concepts learned.
-At the end of each session, refine the learnings so that later we can extract value instead of
-them just being ramblings.
+# Purpose
 
-# Pydantic
-
-## BaseModel
-This is essentially a data class from Spring where a class is serving as a template.
-
-Are validated by pydantic so no need for explicit data validation
-- Really useful
-
-Can do
-```python
-class ProductCreate(ProductBase):
-    pass
-```
-
-Would be a carbon copy of ProductBase that can be edited later
-
-```python
-class ProductResponse(ProductBase):
-    # Allows pydantic to read from object notation (test.number) 
-    # which is how databases store info
-    model_config = ConfigDict(from_attributes=True) 
-    
-    product_id: int
-    date_posted: str
-```
-
-
-Typical endpoint mapping:
-
-  POST   /products       ProductCreate   -> ProductResponse
-  GET    /products/{id}  no request body -> ProductResponse
-  PATCH  /products/{id}  ProductUpdate   -> ProductResponse
-  DELETE /products/{id}  no request body -> no body or ProductResponse
-
-  This separation prevents clients from supplying fields they should not control:
-
-  # Dangerous if used for creation:
-  class Product(BaseModel):
-      id: int
-      is_active: bool
-      created_at: datetime
-
-  A client could then attempt to choose the database ID or creation timestamp.
-
-  ProductBase inheritance is optional. Use it when it removes meaningful duplication, 
-  but do not force every schema into an inheritance hierarchy. 
-  
-The important convention is having separate request and response schemas 
-with appropriate fields and validation.
-
-
----
-My perspective has shifted as if we are assuming that I am a company deploying this website, 
-we need 2 types of APIs:
-
-- Public facing API that the Website uses to serve content
-- Private facing authorized API that employees use to edit content
-
-Already learned this from Software Engineering Capstone, but this solidified this concept.
-Much safer to use an API with data validation instead of doing manual edits that can 
-bypass schema or validation. 
-
----
-
-When importing from other classes, they need to be packages via `__init__.py` to be resolvable.
-
----
-
-PyCharm is much heavier on PC resources on a remote server compared to vscode.
+This document captures concepts, decisions, and implementation lessons learned
+while building the project. The goal is to keep useful context in one place so
+each session can end with clearer notes instead of scattered observations.
 
 ---
 
 # Path Parameters
-Variables embedded into a URL path. 
+
+Path parameters are variables embedded directly in a URL path.
+
+Example:
+
+```python
+http://localhost/api/posts/3
+```
+In this example, `3` is the ID of the specific post being requested.
+<br></br>
+
+In FastAPI, the route can define that value with braces:
 
 ```python
 /api/posts/{post_id}
 ```
 
-FastAPI can validate these parameters via typehints 
+Then the function can use a type hint to tell FastAPI what kind of value it
+expects:
+
+```python
+def get_post(post_id: int):
+    ...
+```
+
+FastAPI automatically validates that path parameter. If someone passes an
+invalid value, such as `/api/posts/not-a-number`, FastAPI returns an HTTP 422
+response because the value cannot be converted to an `int`.
+
+# Pydantic
+
+Pydantic is a data validation library powered by type hints.
+
+The main idea is that I can define the shape of data once, then FastAPI and
+Pydantic can validate incoming request bodies and document the API from those
+models.
+
+## BaseModel
+
+`BaseModel` is the class that Pydantic models inherit from. It feels similar to
+a data class because it defines the fields that belong to a piece of data.
+
+Example:
+
+```python
+class ProductBase(BaseModel):
+    name: str
+    price: Decimal
+```
+
+Pydantic uses the type hints to check that the incoming data has the expected
+shape. If a required field is missing or has the wrong type, FastAPI can return
+an HTTP 422 response automatically.
+
+Models can also inherit from other models. This helps avoid repeating the same
+fields when two API schemas are mostly the same.
+
+Example:
+
+```python
+class ProductCreate(ProductBase):
+    pass
+```
+
+In this example, `ProductCreate` has the same fields as `ProductBase`, but it
+can still be expanded later if product creation needs its own fields.
+
+## Validation
+
+After hooking up `main.py` with the Pydantic product models, the API now has
+automatic validation for missing fields and invalid data types. That makes the
+app more robust without manually checking every request body.
+
+Pydantic models also improve the generated FastAPI docs because the request and
+response shapes become explicit.
 
 ---
 
-I am liking the way FastAPI structures directories when compared to overly verbose spring.
-I plan on following this schema:
+# Miscellaneous Notes
 
-```python
- Keep these concepts separate:
+## Public and Private APIs
 
-  - schemas.py: Pydantic API request and response formats.
-  - models.py: SQLAlchemy database table mappings.
-  - service.py: business logic.
-  - routes.py: HTTP endpoints.
-```
+Thinking about this like a company deploying a website makes the API split
+clearer:
+
+- Public-facing APIs serve product data to the website or customer clients.
+- Private authorized APIs let employees create, update, or deactivate products.
+
+I already learned this idea in Software Engineering Capstone, but this project
+made it feel more concrete. It is safer to edit data through validated APIs than
+through manual database changes that can bypass schema or request validation.
+
+## Python Packages
+
+When importing from other files, directories need an `__init__.py` file so
+Python treats them as packages.
+
+## Editor Notes
+
+PyCharm has a larger footprint compared to VS Code when both are connected
+to a remote server.
+
+## FastAPI Project Structure
+
+I like how FastAPI keeps structure lighter than Spring. For this project, I want
+to keep these concepts separate:
+
+- `schemas.py`: Pydantic API request and response formats
+- `models.py`: SQLAlchemy database table mappings
+- `service.py`: business logic
+- `routes.py`: HTTP endpoints
