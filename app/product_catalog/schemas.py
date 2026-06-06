@@ -1,3 +1,5 @@
+# Pydantic (DTO + Service) Models for product_service
+
 from decimal import Decimal
 
 from pydantic import BaseModel, ConfigDict, Field
@@ -11,11 +13,11 @@ from pydantic import BaseModel, ConfigDict, Field
 # A shared schema
 class ProductBase(BaseModel):
     name: str = Field(min_length=1, max_length=128)  # Product Name
-    description: str | None = Field(
-        default=None, max_length=1000
-    )  # Product description.
+    description: str | None = Field(default=None)  # Product description.
     # Default value means its optional
-    price: Decimal = Field(gt=0, max_digits=10, decimal_places=2)  # Price per product
+    price: Decimal = Field(
+        gt=0, max_digits=10, decimal_places=2
+    )  # Price per product
 
 
 # Represents data an employee must provide when creating a product via API.
@@ -33,6 +35,7 @@ class ProductCreate(ProductBase):
 
 # Defines what the API returns. It includes server-managed fields.
 class ProductResponse(ProductBase):
+    # Can read database @property annotations as well
     model_config = ConfigDict(from_attributes=True)
 
     # adds these server generated fields to Client
