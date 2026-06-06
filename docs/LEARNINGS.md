@@ -83,6 +83,24 @@ app more robust without manually checking every request body.
 Pydantic models also improve the generated FastAPI docs because the request and
 response shapes become explicit.
 
+# Database Migration
+
+In all frameworks, the separation between layers is consistent:
+- Persistence layer is the database in charge of persisting user data
+- Service layer is the background workers in charge of performing business logic
+- Presentation layer is the frontend in charge of talking only to the service layer
+  - It should not interface directly with persistence layer
+    - that could lead to SQL injection and other attacks
+
+FastAPI Industry Standard:
+- SQLAlchemy as the ORM
+- Separate SQLAlchemy models and Pydantic Schemas
+## New Schemas
+
+## SQLAlchemy
+
+## SQLite
+
 ---
 
 # Miscellaneous Notes

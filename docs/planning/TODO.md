@@ -51,3 +51,25 @@ FastAPI and Starlette exception types to understand:
 Do not customize exception handlers immediately. First learn FastAPI's default
 responses, then customize only if the default shape is not useful for the API
 contract.
+
+# TODO
+Rewatch part 5 later since it has logic on how to add users to a table and associated endpoints
+Watch BEFORE authentication part
+
+Part of models.py snippet
+```python
+# TODO: Later migrate this to Auth service
+# TODO: Integrate passwords
+class User(Base):
+    __tablename__ = "users"
+
+    id = Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    username: Mapped[str] = mapped_column(
+        String(50), unique=True, nullable=False
+    )
+    email: Mapped[str] = mapped_column(
+        String(120), unique=True, nullable=False
+    )
+```
+
+Finish watching part 5 at ~52 minutes
