@@ -1,12 +1,13 @@
-# SQLAlchemy (Database) Models for product_service
+# SQLAlchemy (Database) Models for product_catalog
 
 from __future__ import annotations
 
 from decimal import Decimal
 
-from database import Base
-from sqlalchemy import ForeignKey, Integer, Numeric, String, Text
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy import Integer, Numeric, String, Text
+from sqlalchemy.orm import Mapped, mapped_column
+
+from app.product_catalog.database import Base
 
 # Nullable explicitly for important business fields
 # Can imply nullable via typehints with [type | None]

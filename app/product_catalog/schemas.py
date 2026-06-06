@@ -1,4 +1,4 @@
-# Pydantic (DTO + Service) Models for product_service
+# Pydantic (DTO + Service) Models for product_catalog
 
 from decimal import Decimal
 
