@@ -62,3 +62,6 @@ docker-compose.override.yml
 AGENTS.md
 .agents
 commit-message-rules.md
+
+# Database files
+*.db
