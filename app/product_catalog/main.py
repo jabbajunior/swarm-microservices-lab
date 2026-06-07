@@ -3,18 +3,22 @@ from typing import Annotated
 from fastapi import Depends, FastAPI, HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.orm import Session
+from sqlalchemy.sql.elements import AnnotatedColumnElement
 
 from app.product_catalog import models
 from app.product_catalog.database import Base, engine, get_db
-from app.product_catalog.schemas import ProductCreate, ProductResponse
+from app.product_catalog.schemas import (
+    ProductCreate,
+    ProductResponse,
+    ProductUpdate,
+)
 
 # Create Tables if they do not already exist
 Base.metadata.create_all(bind=engine)
 app = FastAPI()
 
-
-# Authorized API Section
-# ----------------------
+# ALL APIS here are internally facing
+# No direct user input
 
 
 ## Create
@@ -72,7 +76,7 @@ def get_products(db: Annotated[Session, Depends(get_db)]):
 # Get a single product by ID
 @app.get("/api/products/{product_id}", response_model=ProductResponse)
 def get_product(product_id: int, db: Annotated[Session, Depends(get_db)]):
-    # TODO should later guard against invalid queries such as -1 or Database queries (select all fomr *)
+    # TODO should later guard against invalid queries such as -1 or Database queries (SQL Injection)
     # Query database for matching product ID
     result = db.execute(
         select(models.Product).where(models.Product.id == product_id)
@@ -91,7 +95,34 @@ def get_product(product_id: int, db: Annotated[Session, Depends(get_db)]):
 
 
 ## Update
+@app.patch("/api/products/{product_id}", response_model=ProductResponse)
+def update_product_partial(
+    product_id: int,
+    product_data: ProductUpdate,
+    db: Annotated[Session, Depends(get_db)],
+):
+    result = db.execute(
+        select(models.Product).where(models.Product.id == product_id)
+    )
+
+    product = result.scalars().first()
+
+    # Ensure do not update an invalid product_id
+    if not product:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Product not found"
+        )
+
+    # Removes empty fields
+    update_data = product_data.model_dump(exclude_unset=True)
+
+    # Dynamically Sets fields to new ones
+    for field, value in update_data.items():
+        setattr(product, field, value)
+
+    db.commit()
+    db.refresh(product)
+    return product
+
 
 ## Delete
-
-# User-Facing API Section
