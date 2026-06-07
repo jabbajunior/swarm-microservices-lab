@@ -64,7 +64,11 @@ def create_product(
 
 
 # Get all products
-@app.get("/api/products", response_model=list[ProductResponse])
+@app.get(
+    "/api/products",
+    response_model=list[ProductResponse],
+    status_code=status.HTTP_200_OK,
+)
 # db: Tells FastAPI to inject database into here
 def get_products(db: Annotated[Session, Depends(get_db)]):
     result = db.execute(select(models.Product))
@@ -74,7 +78,11 @@ def get_products(db: Annotated[Session, Depends(get_db)]):
 
 
 # Get a single product by ID
-@app.get("/api/products/{product_id}", response_model=ProductResponse)
+@app.get(
+    "/api/products/{product_id}",
+    response_model=ProductResponse,
+    status_code=status.HTTP_200_OK,
+)
 def get_product(product_id: int, db: Annotated[Session, Depends(get_db)]):
     # TODO should later guard against invalid queries such as -1 or Database queries (SQL Injection)
     # Query database for matching product ID
@@ -94,8 +102,12 @@ def get_product(product_id: int, db: Annotated[Session, Depends(get_db)]):
     )
 
 
-## Update
-@app.patch("/api/products/{product_id}", response_model=ProductResponse)
+## Partially Update an Individual Product
+@app.patch(
+    "/api/products/{product_id}",
+    response_model=ProductResponse,
+    status_code=status.HTTP_200_OK,
+)
 def update_product_partial(
     product_id: int,
     product_data: ProductUpdate,
@@ -125,4 +137,26 @@ def update_product_partial(
     return product
 
 
-## Delete
+## Delete a single product by ID
+@app.delete(
+    "/api/products/{product_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+)
+def delete_product(product_id: int, db: Annotated[Session, Depends(get_db)]):
+    # Query database for matching product ID
+    result = db.execute(
+        select(models.Product).where(models.Product.id == product_id)
+    )
+
+    # Grabs first matching result or None if empty
+    product = result.scalars().first()
+
+    # If no product, raise a 404 error
+    if not product:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Product not found"
+        )
+
+    # Delete the product
+    db.delete(product)
+    db.commit()
