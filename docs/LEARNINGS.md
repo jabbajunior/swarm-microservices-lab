@@ -136,3 +136,34 @@ to keep these concepts separate:
 - `models.py`: SQLAlchemy database table mappings
 - `service.py`: business logic
 - `routes.py`: HTTP endpoints
+
+## Interactive Docs
+
+The interactive swagger docs that FastAPI ships with is incredibly useful when testing the codebase
+as we do not need to make raw API calls using a tool like Postman and can test 
+right in the browser.
+
+## PUT vs PATCH
+PUT is a full replacement of the original resource with new resource.
+
+PATCH is a partial replacement of some of the original resource with some of the new resource.
+
+## HTTP Codes
+
+200 OK - Successful GET, PUT, or PATCH operation
+
+201 Created - Successful POST for new products
+
+409 Conflict - Duplicate ID when creating a product
+
+404 Not found - Resource does not exist
+
+422 Unprocessable Entity - User sent an invalid request (JSON formatting,
+entering a string instead of an ID, etc.)
+
+### 200 vs HTTP 204
+A HTTP 200 is sent when an operation is successful and the server is returning
+additional content.
+
+An HTTP 204 is sent when the operation succeeded, but the server does not return
+additional content. 

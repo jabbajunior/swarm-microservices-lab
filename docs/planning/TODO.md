@@ -2,23 +2,6 @@
 
 Later edit python functions to support asynchronous calls
 
-## Product Service Initial Plan
-The branch should support:
-
-  - [ ] Creating products.
-  - [ ] Listing products.
-  - [ ] Fetching products by ID or SKU.
-  - [ ] Updating products and prices.
-  - [ ] Deactivating products.
-  - [ ] Persisting products in PostgreSQL.
-  - [ ] Validating requests with Pydantic.
-  - [ ] Automated tests.
-  - [ ] Running through Docker Compose.
-
-Public read behavior: list products, fetch product by ID/SKU, later support product discovery/search. This can ultimately serve website-facing needs.
-Private admin behavior: create products, update prices, deactivate products. This should require employee/admin authorization and should not be open to normal website users.
-
-
 ## Product Service Error Handling
 
 Handle and test the common API failure cases instead of only testing happy
@@ -72,4 +55,9 @@ class User(Base):
     )
 ```
 
-Finish watching part 5 at ~52 minutes
+## Databases
+When migrating from SQLite to Postgres, 
+migrate from multiple DBs to a single shared DB with different tables per service.
+
+## Bulk Endpoints
+Consider later "bulk" endpoints for creating, updating, getting, or deleting more than one object at once.
