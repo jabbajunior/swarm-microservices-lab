@@ -26,22 +26,6 @@ class ProductCreate(ProductBase):
     pass
 
 
-# Represents an update (can be partial).
-# Fields are optional since client may only update one field
-# Often does not inherit from ProductBase since that would require said inherited fields
-
-
-class ProductUpdate(ProductBase):
-    name: str | None = Field(
-        default=None, min_length=1, max_length=128
-    )  # Product Name
-    description: str | None = Field(default=None)  # Product description.
-    # Default value means its optional
-    price: Decimal | None = Field(
-        default=None, gt=0, max_digits=10, decimal_places=2
-    )  # Price per product
-
-
 # Defines what the API returns. It includes server-managed fields.
 class ProductResponse(ProductBase):
     # Can read database @property annotations as well
@@ -51,9 +35,15 @@ class ProductResponse(ProductBase):
     id: int
 
 
-"""
-  - ProductCreate: private/admin request body
-  - ProductUpdate: private/admin request body
-  - ProductResponse: safe product data returned to callers
-  - Database model later: internal persistence shape
-"""
+# Represents an update (can be partial).
+# Fields are optional since client may only update one field
+# Often does not inherit from ProductBase since that would require said inherited field
+class ProductUpdate(BaseModel):
+    name: str | None = Field(
+        default=None, min_length=1, max_length=128
+    )  # Product Name
+    description: str | None = Field(default=None)  # Product description.
+    # Default value means its optional
+    price: Decimal | None = Field(
+        default=None, gt=0, max_digits=10, decimal_places=2
+    )  # Price per product
