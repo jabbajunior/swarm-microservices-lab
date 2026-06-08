@@ -71,6 +71,15 @@ Get all services to meet these requirements:
 
 Services:
 [ ] Inventory Service
+
+`TODO`
+need a way of keeping inventory_id and product_id synced, otherwise 1 
+messed up entry leads to data drift
+- Maybe reject if product_id does not exist, not currently handled
+
+Also, if we add something with quantity < reserved_quantity can no longer
+list from database
+
 [ ] Ordering Service
 [ ] Auth Service
 [ ] Search Service
