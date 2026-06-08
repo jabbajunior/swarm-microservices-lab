@@ -3,18 +3,17 @@ from typing import Annotated
 from fastapi import Depends, FastAPI, HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.orm import Session
-from sqlalchemy.sql.elements import AnnotatedColumnElement
 
+from app.database.database import get_db
+from app.database.init_db import init_db
 from app.product_catalog import models
-from app.product_catalog.database import Base, engine, get_db
 from app.product_catalog.schemas import (
     ProductCreate,
     ProductResponse,
     ProductUpdate,
 )
 
-# Create Tables if they do not already exist
-Base.metadata.create_all(bind=engine)
+init_db()
 app = FastAPI()
 
 # ALL APIS here are internally facing

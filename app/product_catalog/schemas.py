@@ -49,11 +49,3 @@ class ProductResponse(ProductBase):
 
     # adds these server generated fields to Client
     id: int
-
-
-"""
-  - ProductCreate: private/admin request body
-  - ProductUpdate: private/admin request body
-  - ProductResponse: safe product data returned to callers
-  - Database model later: internal persistence shape
-"""

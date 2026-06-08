@@ -1,12 +1,10 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import DeclarativeBase, sessionmaker
 
-# TODO maybe rename to database.db since all other services have their own
-
 # Database URL
 # Everything after /// is current url
 # (Our case is current directory product.db)
-SQLALCHEMY_DATABASE_URL = "sqlite:///./app/product_catalog/product.db"
+SQLALCHEMY_DATABASE_URL = "sqlite:///./app/database/database.db"
 
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL,
