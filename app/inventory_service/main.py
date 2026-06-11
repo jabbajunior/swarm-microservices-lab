@@ -123,6 +123,7 @@ def update_inventory_item_partial(
 
     update_data = updated_item.model_dump(exclude_unset=True)
 
+    # Grabs these fields from the model
     new_quantity = update_data.get(
         "stock_quantity", stored_item.stock_quantity
     )
