@@ -167,3 +167,12 @@ additional content.
 
 An HTTP 204 is sent when the operation succeeded, but the server does not return
 additional content. 
+
+
+## Pydantic Schemas
+While working on `app/ordering_service/schemas.py` I got stuck on making schemas.
+
+After thinking about it, I came up with this framework:
+1. List out all fields each endpoint will need (CRUD)
+2. Abstract out common fields into a BaseClass that other fields can inherit from
+3. Place remaining fields in dedicated Schema Classes
