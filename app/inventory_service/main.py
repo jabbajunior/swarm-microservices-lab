@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 from app.database.database import get_db
 from app.database.init_db import init_db
 from app.inventory_service import models
+from app.inventory_service.models import Inventory
 from app.inventory_service.schemas import (
     InventoryCreate,
     InventoryResponse,
@@ -65,7 +66,7 @@ def create_inventory_item(
 
     new_item = models.Inventory(
         product_id=inventory_item.product_id,
-        quantity=inventory_item.quantity,
+        stock_quantity=inventory_item.stock_quantity,
         reserved_quantity=inventory_item.reserved_quantity,
     )
 
@@ -116,13 +117,15 @@ def update_inventory_item_partial(
     inventory_id: int,
     updated_item: InventoryUpdate,
     db: Annotated[Session, Depends(get_db)],
-) -> None:
+) -> Inventory:
 
     stored_item = _get_inventory_item_or_404(inventory_id, db)
 
     update_data = updated_item.model_dump(exclude_unset=True)
 
-    new_quantity = update_data.get("quantity", stored_item.quantity)
+    new_quantity = update_data.get(
+        "stock_quantity", stored_item.stock_quantity
+    )
     new_reserved_quantity = update_data.get(
         "reserved_quantity", stored_item.reserved_quantity
     )

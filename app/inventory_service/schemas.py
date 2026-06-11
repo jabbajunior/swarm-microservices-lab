@@ -4,7 +4,7 @@ from pydantic import BaseModel, ConfigDict, Field
 # BaseInventory
 class InventoryBase(BaseModel):
     product_id: int = Field(gt=0)
-    quantity: int = Field(default=0, ge=0)  # Total amount of inventory
+    stock_quantity: int = Field(default=0, ge=0)  # Total amount of inventory
     reserved_quantity: int = Field(
         default=0, ge=0
     )  # Amount of inventory reserved for customers
@@ -23,5 +23,5 @@ class InventoryResponse(InventoryBase):
 
 
 class InventoryUpdate(BaseModel):
-    quantity: int | None = Field(default=None, ge=0)
+    stock_quantity: int | None = Field(default=None, ge=0)
     reserved_quantity: int | None = Field(default=None, ge=0)
