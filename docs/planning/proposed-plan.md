@@ -87,8 +87,8 @@ stock reservation, order creation, authentication, or search indexing.
 
 ## Recommended Build Order
 
-1. Product Service
-2. Inventory Service
+~~1. Product Service~~
+~~2. Inventory Service~~
 3. Ordering Service
 4. Auth Service
 5. Search Service

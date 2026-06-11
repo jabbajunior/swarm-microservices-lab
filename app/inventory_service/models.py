@@ -14,14 +14,14 @@ class Inventory(Base):
         unique=True,
         index=True,
     )
-    quantity: Mapped[int | None] = mapped_column(
+    stock_quantity: Mapped[int] = mapped_column(
         Integer, nullable=False, default=0
     )
-    reserved_quantity: Mapped[int | None] = mapped_column(
+    reserved_quantity: Mapped[int] = mapped_column(
         Integer, nullable=False, default=0
     )
 
     # Calculates the available quantity from database
     @property
     def available_quantity(self) -> int:
-        return self.quantity - self.reserved_quantity
+        return self.stock_quantity - self.reserved_quantity

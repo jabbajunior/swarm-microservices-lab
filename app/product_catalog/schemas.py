@@ -26,12 +26,19 @@ class ProductCreate(ProductBase):
     pass
 
 
+# Defines what the API returns. It includes server-managed fields.
+class ProductResponse(ProductBase):
+    # Can read database @property annotations as well
+    model_config = ConfigDict(from_attributes=True)
+
+    # adds these server generated fields to Client
+    id: int
+
+
 # Represents an update (can be partial).
 # Fields are optional since client may only update one field
-# Often does not inherit from ProductBase since that would require said inherited fields
-
-
-class ProductUpdate(ProductBase):
+# Often does not inherit from ProductBase since that would require said inherited field
+class ProductUpdate(BaseModel):
     name: str | None = Field(
         default=None, min_length=1, max_length=128
     )  # Product Name
@@ -40,12 +47,3 @@ class ProductUpdate(ProductBase):
     price: Decimal | None = Field(
         default=None, gt=0, max_digits=10, decimal_places=2
     )  # Price per product
-
-
-# Defines what the API returns. It includes server-managed fields.
-class ProductResponse(ProductBase):
-    # Can read database @property annotations as well
-    model_config = ConfigDict(from_attributes=True)
-
-    # adds these server generated fields to Client
-    id: int

@@ -61,3 +61,18 @@ migrate from multiple DBs to a single shared DB with different tables per servic
 
 ## Bulk Endpoints
 Consider later "bulk" endpoints for creating, updating, getting, or deleting more than one object at once.
+
+# Initial Feature Branches
+
+Get all services to meet these requirements:
+- [ ] CRUD Functionality
+- [ ] Uses Pydantic Schemas
+- [ ] Integrated with a SQLite database using SQLAlchemy
+
+Services:
+[ ] User Service
+
+[ ] Search Service
+- Leave this until the end since plan on using OpenSearch
+
+After User Service has CRUD functionality, use `routers` to separate API logic from service logic.
