@@ -70,35 +70,9 @@ Get all services to meet these requirements:
 - [ ] Integrated with a SQLite database using SQLAlchemy
 
 Services:
-[X] Inventory Service
+[ ] User Service
 
-`TODO`
-need a way of keeping inventory_id and product_id synced, otherwise 1 
-messed up entry leads to data drift
-- Maybe reject if product_id does not exist, not currently handled
-
-Also, if we add something with quantity < reserved_quantity can no longer
-list from database
-
-[ ] Ordering Service
-
-Orders keep track of a customer's Order.
-
-Necessary Fields:
-- User ID/Customer ID
-- Order Status
-  - An enum
-    - Cancelled
-    - Fulfilled
-    - Processing
-- Order ID
-- Product Ordered
-  - Quantity of porduct
-  - Price of order
-
-To start defining schemas do this:
-- First define what a user should supply via API
-- Then define what the response should look like
-- Then can later abstract out into a "BaseModel"
-[ ] Auth Service
 [ ] Search Service
+- Leave this until the end since plan on using OpenSearch
+
+After User Service has CRUD functionality, use `routers` to separate API logic from service logic.
