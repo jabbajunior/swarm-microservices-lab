@@ -110,9 +110,10 @@ def update_user_partial(
         )
     update_data = user_data.model_dump(exclude_unset=True)
 
-    # Hash the password if user sets it
-    if "password" in update_data:
-        update_data["password"] = compute_password_hash("password")
+    password = update_data.pop("password", None)
+
+    if password is not None:
+        update_data["password_hash"] = compute_password_hash(password)
 
     for field, value in update_data.items():
         setattr(stored_user, field, value)
